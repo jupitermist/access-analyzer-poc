@@ -1,0 +1,6 @@
+BU/
+log/
+reports/
+anomaly_report.pdf
+__pycache__/
+*.txt
