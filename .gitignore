@@ -5,3 +5,4 @@ anomaly_report.pdf
 __pycache__/
 *.txt
 *.pyc
+.env

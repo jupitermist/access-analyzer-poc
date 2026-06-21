@@ -6,7 +6,9 @@ import streamlit as st
 import pandas as pd
 import anthropic
 from fpdf import FPDF
+from dotenv import load_dotenv
 
+load_dotenv()
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
 st.title("Access Log Analyzer")
