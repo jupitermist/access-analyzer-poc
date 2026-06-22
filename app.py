@@ -18,7 +18,12 @@ role_filter = st.selectbox("Role", ["All","ST","SM","AD"])
 operation_filter = st.selectbox("Operation", ["All","LOGIN","LOGOUT","ACCESS","MODIFY","PERMISSION_CHANGE"])
 
 
-df = pd.read_csv("logs.csv")
+# df = pd.read_csv("logs.csv")
+if os.path.exists("logs.csv"):
+    df = pd.read_csv("logs.csv")
+else:
+    st.error('ファイルがありません')
+    st.stop()
 
 prompt = f"""
 各ユーザーの通常の行動パターンを分析して、そのパターンから逸脱しているものを検出して。以下のJSON形式のみで返してください。他のテキストは一切含めないでください。
