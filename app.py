@@ -19,9 +19,13 @@ operation_filter = st.selectbox("Operation", ["All","LOGIN","LOGOUT","ACCESS","M
 
 
 if os.path.exists("logs.csv"):
-    df = pd.read_csv("logs.csv")
-else:
-    st.error('ファイルがありません')
+    try:
+        df = pd.read_csv("logs.csv")
+    except:
+        st.error("Failed to read the file")
+        st.stop()
+else:             
+    st.error('File not found')
     st.stop()
 
 prompt = f"""
