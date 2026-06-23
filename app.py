@@ -18,7 +18,6 @@ role_filter = st.selectbox("Role", ["All","ST","SM","AD"])
 operation_filter = st.selectbox("Operation", ["All","LOGIN","LOGOUT","ACCESS","MODIFY","PERMISSION_CHANGE"])
 
 
-# df = pd.read_csv("logs.csv")
 if os.path.exists("logs.csv"):
     df = pd.read_csv("logs.csv")
 else:
