@@ -89,9 +89,20 @@ try:
         max_tokens=4096,
         messages=[{"role": "user", "content": prompt}]
 )
-except:
-    st.error("Cannot connect to AI")
+
+except anthropic.APIConnectionError:
+    st.error("Connection trouble. Check your network.")
     st.stop()
+except anthropic.AuthenticationError:
+    st.error("Authentication error. Check your API key.")
+    st.stop()
+except anthropic.RateLimitError:
+    st.error("Rate limit exceeded. Try again later.")
+    st.stop()
+except Exception:
+    st.error("Unexpected error occurred.")
+    st.stop()            
+    
 
 raw = response.content[0].text
 
@@ -106,7 +117,7 @@ try:
 except:
     st.error("Failed to parse AI response") 
     st.stop()   
-    
+        
 
 h1, h2, h3, h4 = st.columns([1, 1, 3, 1])
 h1.write("Account")
