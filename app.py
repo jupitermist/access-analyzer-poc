@@ -83,41 +83,45 @@ st.write(f" {len(df)} records found" )
 st.dataframe(df)
 st.divider() 
 
-try:
-    response = client.messages.create(
-        model="claude-sonnet-4-5",
-        max_tokens=4096,
-        messages=[{"role": "user", "content": prompt}]
-)
+@st.cache_data
+def analyze_logs(prompt):
+    try:
+        response = client.messages.create(
+            model="claude-sonnet-4-5",
+            max_tokens=4096,
+            messages=[{"role": "user", "content": prompt}]
+    )
 
-except anthropic.APIConnectionError:
-    st.error("Connection trouble. Check your network.")
-    st.stop()
-except anthropic.AuthenticationError:
-    st.error("Authentication error. Check your API key.")
-    st.stop()
-except anthropic.RateLimitError:
-    st.error("Rate limit exceeded. Try again later.")
-    st.stop()
-except Exception:
-    st.error("Unexpected error occurred.")
-    st.stop()            
+    except anthropic.APIConnectionError:
+        st.error("Connection trouble. Check your network.")
+        st.stop()
+    except anthropic.AuthenticationError:
+        st.error("Authentication error. Check your API key.")
+        st.stop()
+    except anthropic.RateLimitError:
+        st.error("Rate limit exceeded. Try again later.")
+        st.stop()
+    except Exception:
+        st.error("Unexpected error occurred.")
+        st.stop()            
     
 
-raw = response.content[0].text
+    raw = response.content[0].text
 
-if raw.startswith("```"):
-    raw = raw.split("```")[1]
-    if raw.startswith("json"):
-        raw = raw[4:]
+    if raw.startswith("```"):
+        raw = raw.split("```")[1]
+        if raw.startswith("json"):
+            raw = raw[4:]
 
 
-try:
-    data =json.loads(raw)
-except:
-    st.error("Failed to parse AI response") 
-    st.stop()   
+    try:
+        data =json.loads(raw)
+    except:
+        st.error("Failed to parse AI response") 
+        st.stop()   
+    return data    
         
+data =analyze_logs(prompt)
 
 h1, h2, h3, h4 = st.columns([1, 1, 3, 1])
 h1.write("Account")
