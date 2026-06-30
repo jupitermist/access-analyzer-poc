@@ -11,6 +11,44 @@ from dotenv import load_dotenv
 load_dotenv()
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
+@st.cache_data
+def analyze_logs(prompt):
+    try:
+        response = client.messages.create(
+            model="claude-sonnet-4-5",
+            max_tokens=4096,
+            messages=[{"role": "user", "content": prompt}]
+    )
+
+    except anthropic.APIConnectionError:
+        st.error("Connection trouble. Check your network.")
+        st.stop()
+    except anthropic.AuthenticationError:
+        st.error("Authentication error. Check your API key.")
+        st.stop()
+    except anthropic.RateLimitError:
+        st.error("Rate limit exceeded. Try again later.")
+        st.stop()
+    except Exception:
+        st.error("Unexpected error occurred.")
+        st.stop()            
+    
+
+    raw = response.content[0].text
+
+    if raw.startswith("```"):
+        raw = raw.split("```")[1]
+        if raw.startswith("json"):
+            raw = raw[4:]
+
+
+    try:
+        data =json.loads(raw)
+    except:
+        st.error("Failed to parse AI response") 
+        st.stop()   
+    return data  
+
 st.title("Access Log Analyzer")
 
 
@@ -83,43 +121,7 @@ st.write(f" {len(df)} records found" )
 st.dataframe(df)
 st.divider() 
 
-@st.cache_data
-def analyze_logs(prompt):
-    try:
-        response = client.messages.create(
-            model="claude-sonnet-4-5",
-            max_tokens=4096,
-            messages=[{"role": "user", "content": prompt}]
-    )
-
-    except anthropic.APIConnectionError:
-        st.error("Connection trouble. Check your network.")
-        st.stop()
-    except anthropic.AuthenticationError:
-        st.error("Authentication error. Check your API key.")
-        st.stop()
-    except anthropic.RateLimitError:
-        st.error("Rate limit exceeded. Try again later.")
-        st.stop()
-    except Exception:
-        st.error("Unexpected error occurred.")
-        st.stop()            
-    
-
-    raw = response.content[0].text
-
-    if raw.startswith("```"):
-        raw = raw.split("```")[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
-
-
-    try:
-        data =json.loads(raw)
-    except:
-        st.error("Failed to parse AI response") 
-        st.stop()   
-    return data    
+  
         
 data =analyze_logs(prompt)
 
