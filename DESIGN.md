@@ -6,14 +6,17 @@
 **Status**: Accepted
 
 **Context**
-Incident records must serve as audit evidence.
-CSV and text can be edited freely after export — no integrity.
+Incident reports are read by auditors and managers, often outside this tool.
+They need a fixed format that looks the same wherever it is opened.
 
 **Decision**
-Export reports as PDF.
+Export reports as timestamped PDF files.
 
 **Consequences**
-Fixed layout, tamper-resistant, audit-ready.
+Fixed layout, easy to share and file as audit material.
+PDF alone does not prevent or detect tampering: a PDF can still be edited after export.
+Tamper detection (recording a hash in a separate, protected store and verifying it later)
+is out of scope for this PoC and is a candidate for future work.
 Harder to parse programmatically than CSV.
 
 ---
