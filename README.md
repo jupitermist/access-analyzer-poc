@@ -14,6 +14,11 @@ Detects access log anomalies with Claude, and exports audit-ready PDF reports.
 Analyzes access logs (CSV) with Claude to detect anomalies.
 Results are shown in a dashboard and exported as timestamped PDF reports.
 
+## Architecture
+
+A single LLM call, treated as an untrusted component: everything around it is designed
+to keep it safe to operate. Each decision is recorded in [DESIGN.md](DESIGN.md).
+
 ## Performance
 
 - Analysis results cached to avoid redundant API calls
