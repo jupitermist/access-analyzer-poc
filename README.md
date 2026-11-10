@@ -16,8 +16,12 @@ Results are shown in a dashboard and exported as timestamped PDF reports.
 
 ## Architecture
 
-A single LLM call, treated as an untrusted component: everything around it is designed
-to keep it safe to operate. Each decision is recorded in [DESIGN.md](DESIGN.md).
+This PoC is a single LLM call. The focus is the design of the detection:
+
+- **Each user's own normal, not fixed rules.** The model infers each user's usual pattern and flags departures from it. ([ADR-007](DESIGN.md))
+- **Findings show their evidence.** Each one reports the normal pattern, the deviation, and the evidence chain. ([ADR-008](DESIGN.md))
+- **The hard cases do not fail.** The test logs include self-restored privileges, permissions left after a transfer, and off-hours access from an external IP. All of them succeed, so failed logins do not reveal them. ([ADR-009](DESIGN.md))
+- **Detection rate is not established.** Results depended heavily on the evaluation dataset, and the detection logic could not be evaluated on its own. ([ADR-010](DESIGN.md))
 
 ## Performance
 
